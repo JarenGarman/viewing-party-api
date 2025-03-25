@@ -4,7 +4,13 @@ class Api::V1::MoviesController < ApplicationController
       faraday.request :authorization, "Bearer", Rails.application.credentials.tmdb[:token]
     end
 
-    response = conn.get("/3/movie/top_rated")
+    response = if params[:search]
+      conn.get("/3/search/movie") do |req|
+        req.params[:query] = params[:search].downcase
+      end
+    else
+      conn.get("/3/movie/top_rated")
+    end
 
     json = JSON.parse(response.body, symbolize_names: true)
 
@@ -15,7 +21,7 @@ class Api::V1::MoviesController < ApplicationController
         id: movie[:id],
         type: "movie",
         attributes: {
-          title: movie[:original_title],
+          title: movie[:title],
           vote_average: movie[:vote_average]
         }
       }
