@@ -56,4 +56,8 @@ group :development do
   gem "pgreset"
 end
 
-gem "simplecov", require: false, group: :test
+group :test do
+  gem "simplecov", require: false
+  gem "webmock"
+  gem "vcr"
+end
