@@ -19,7 +19,7 @@ RSpec.describe "Viewing Party API", type: :request do
   describe "Create Viewing Party Endpoint" do
     context "with valid request" do
       it "returns 201 Created and provides expected fields" do
-        post api_v1_user_viewing_party_path(user3.id), params: party_params, as: :json
+        post api_v1_user_viewing_parties_path(user3.id), params: party_params, as: :json
 
         expect(response).to have_http_status(:created)
         json = JSON.parse(response.body, symbolize_names: true)
@@ -42,7 +42,7 @@ RSpec.describe "Viewing Party API", type: :request do
       it "returns 201 Created and provides expected fields with nonexistent invitee" do
         party_params[:invitees] << 1000000
 
-        post api_v1_user_viewing_party_path(user3.id), params: party_params, as: :json
+        post api_v1_user_viewing_parties_path(user3.id), params: party_params, as: :json
 
         expect(response).to have_http_status(:created)
         json = JSON.parse(response.body, symbolize_names: true)
@@ -67,7 +67,7 @@ RSpec.describe "Viewing Party API", type: :request do
       it "returns an error for missing field" do
         party_params[:name] = ""
 
-        post api_v1_user_viewing_party_path(user3.id), params: party_params, as: :json
+        post api_v1_user_viewing_parties_path(user3.id), params: party_params, as: :json
         json = JSON.parse(response.body, symbolize_names: true)
 
         expect(response).to have_http_status(:bad_request)
@@ -78,7 +78,7 @@ RSpec.describe "Viewing Party API", type: :request do
       it "returns an error for time too short" do
         party_params[:end_time] = "2025-02-01 10:00:01"
 
-        post api_v1_user_viewing_party_path(user3.id), params: party_params, as: :json
+        post api_v1_user_viewing_parties_path(user3.id), params: party_params, as: :json
         json = JSON.parse(response.body, symbolize_names: true)
 
         expect(response).to have_http_status(:bad_request)
@@ -89,7 +89,7 @@ RSpec.describe "Viewing Party API", type: :request do
       it "returns an error for end time before start time" do
         party_params[:end_time] = "2025-02-01 09:00:00"
 
-        post api_v1_user_viewing_party_path(user3.id), params: party_params, as: :json
+        post api_v1_user_viewing_parties_path(user3.id), params: party_params, as: :json
         json = JSON.parse(response.body, symbolize_names: true)
 
         expect(response).to have_http_status(:bad_request)
@@ -98,7 +98,7 @@ RSpec.describe "Viewing Party API", type: :request do
       end
 
       it "returns an error for nonexistent host" do
-        post api_v1_user_viewing_party_path(100000), params: party_params, as: :json
+        post api_v1_user_viewing_parties_path(100000), params: party_params, as: :json
         json = JSON.parse(response.body, symbolize_names: true)
 
         expect(response).to have_http_status(:not_found)
