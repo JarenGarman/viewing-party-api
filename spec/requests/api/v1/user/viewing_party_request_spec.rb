@@ -18,7 +18,7 @@ RSpec.describe "Viewing Party API", type: :request do
 
   describe "Create Viewing Party Endpoint" do
     context "with valid request" do
-      it "returns 201 Created and provides expected fields" do
+      it "returns 201 Created and provides expected fields", :vcr do
         post api_v1_user_viewing_parties_path(user3.id), params: party_params, as: :json
 
         expect(response).to have_http_status(:created)
@@ -39,7 +39,7 @@ RSpec.describe "Viewing Party API", type: :request do
         end
       end
 
-      it "returns 201 Created and provides expected fields with nonexistent invitee" do
+      it "returns 201 Created and provides expected fields with nonexistent invitee", :vcr do
         party_params[:invitees] << 1000000
 
         post api_v1_user_viewing_parties_path(user3.id), params: party_params, as: :json
@@ -64,7 +64,7 @@ RSpec.describe "Viewing Party API", type: :request do
     end
 
     context "with invalid request" do
-      it "returns an error for missing field" do
+      it "returns an error for missing field", :vcr do
         party_params[:name] = ""
 
         post api_v1_user_viewing_parties_path(user3.id), params: party_params, as: :json
@@ -75,29 +75,29 @@ RSpec.describe "Viewing Party API", type: :request do
         expect(json[:status]).to eq(400)
       end
 
-      it "returns an error for time too short" do
+      it "returns an error for time too short", :vcr do
         party_params[:end_time] = "2025-02-01 10:00:01"
 
         post api_v1_user_viewing_parties_path(user3.id), params: party_params, as: :json
         json = JSON.parse(response.body, symbolize_names: true)
 
         expect(response).to have_http_status(:bad_request)
-        expect(json[:message]).to eq("End time must be greater than 2025-02-01 10:00:00 UTC")
+        expect(json[:message]).to eq("Party must last long enough for the entire movie")
         expect(json[:status]).to eq(400)
       end
 
-      it "returns an error for end time before start time" do
+      it "returns an error for end time before start time", :vcr do
         party_params[:end_time] = "2025-02-01 09:00:00"
 
         post api_v1_user_viewing_parties_path(user3.id), params: party_params, as: :json
         json = JSON.parse(response.body, symbolize_names: true)
 
         expect(response).to have_http_status(:bad_request)
-        expect(json[:message]).to eq("End time must be greater than 2025-02-01 10:00:00 UTC")
+        expect(json[:message]).to eq("Party must last long enough for the entire movie")
         expect(json[:status]).to eq(400)
       end
 
-      it "returns an error for nonexistent host" do
+      it "returns an error for nonexistent host", :vcr do
         post api_v1_user_viewing_parties_path(100000), params: party_params, as: :json
         json = JSON.parse(response.body, symbolize_names: true)
 
