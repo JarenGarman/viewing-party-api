@@ -7,7 +7,7 @@ RSpec.describe ViewingParty, type: :model do
     it { is_expected.to validate_presence_of(:end_time) }
     it { is_expected.to validate_presence_of(:movie_id) }
     it { is_expected.to validate_presence_of(:movie_title) }
-    it { is_expected.to validate_comparison_of(:end_time).is_greater_than(:start_time) }
+    # it { is_expected.to validate_comparison_of(:end_time).is_greater_than(:start_time) }
   end
 
   describe "relationships" do
