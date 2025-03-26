@@ -51,6 +51,28 @@ RSpec.describe "Viewing Party API", type: :request do
         expect(json[:message]).to eq("Name can't be blank")
         expect(json[:status]).to eq(400)
       end
+
+      it "returns an error for time too short" do
+        party_params[:end_time] = "2025-02-01 10:00:01"
+
+        post api_v1_user_viewing_party_path(user3.id), params: party_params, as: :json
+        json = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(:bad_request)
+        expect(json[:message]).to eq("Party duration can't be less than movie runtime")
+        expect(json[:status]).to eq(400)
+      end
+
+      it "returns an error for end time before start time" do
+        party_params[:end_time] = "2025-02-01 09:00:00"
+
+        post api_v1_user_viewing_party_path(user3.id), params: party_params, as: :json
+        json = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(:bad_request)
+        expect(json[:message]).to eq("Party end time can't be before start time")
+        expect(json[:status]).to eq(400)
+      end
     end
   end
 end
