@@ -96,6 +96,15 @@ RSpec.describe "Viewing Party API", type: :request do
         expect(json[:message]).to eq("Party end time can't be before start time")
         expect(json[:status]).to eq(400)
       end
+
+      it "returns an error for nonexistent host" do
+        post api_v1_user_viewing_party_path(100000), params: party_params, as: :json
+        json = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(:not_found)
+        expect(json[:message]).to eq("Host user does not exist")
+        expect(json[:status]).to eq(404)
+      end
     end
   end
 end
