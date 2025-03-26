@@ -1,9 +1,9 @@
 require "rails_helper"
 
-RSpec.describe "Movies Endpoint" do
+RSpec.describe "Movies Endpoint", type: :request do
   describe "happy path" do
     it "can retrieve top rated movies", :vcr do
-      get "/api/v1/movies"
+      get api_v1_movies_path
 
       expect(response).to be_successful
       json = JSON.parse(response.body, symbolize_names: true)
@@ -18,7 +18,7 @@ RSpec.describe "Movies Endpoint" do
     end
 
     it "can search movie titles", :vcr do
-      get "/api/v1/movies?search=Lord%20of%20the%20Rings"
+      get api_v1_movies_path, params: {search: "Lord of the Rings"}
 
       expect(response).to be_successful
       json = JSON.parse(response.body, symbolize_names: true)
