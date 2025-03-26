@@ -1,6 +1,6 @@
 require "rails_helper"
 
-RSpec.describe "Movies Endpoint", type: :request do
+RSpec.describe "Movies API", type: :request do
   describe "happy path" do
     it "can retrieve top rated movies", :vcr do
       get api_v1_movies_path
