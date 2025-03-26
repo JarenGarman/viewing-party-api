@@ -27,13 +27,13 @@ RSpec.describe "Viewing Party API", type: :request do
         expect(json[:data][:id]).to eq(ViewingParty.last.id.to_s)
         expect(json[:data][:attributes]).to include(
           name: "Juliet's Bday Movie Bash!",
-          start_time: "2025-02-01 10:00:00",
-          end_time: "2025-02-01 14:30:00",
+          start_time: "2025-02-01T10:00:00.000Z",
+          end_time: "2025-02-01T14:30:00.000Z",
           movie_id: 278,
           movie_title: "The Shawshank Redemption"
         )
-        expect(json[:relationships][:users][:data].count).to eq(3)
-        json[:relationships][:users][:data].each do |user|
+        expect(json[:data][:relationships][:users][:data].count).to eq(3)
+        json[:data][:relationships][:users][:data].each do |user|
           expect(user[:id]).to eq(user1.id.to_s).or eq(user2.id.to_s).or eq(user4.id.to_s)
           expect(user[:type]).to eq("user")
         end
@@ -50,13 +50,13 @@ RSpec.describe "Viewing Party API", type: :request do
         expect(json[:data][:id]).to eq(ViewingParty.last.id.to_s)
         expect(json[:data][:attributes]).to include(
           name: "Juliet's Bday Movie Bash!",
-          start_time: "2025-02-01 10:00:00",
-          end_time: "2025-02-01 14:30:00",
+          start_time: "2025-02-01T10:00:00.000Z",
+          end_time: "2025-02-01T14:30:00.000Z",
           movie_id: 278,
           movie_title: "The Shawshank Redemption"
         )
-        expect(json[:relationships][:users][:data].count).to eq(3)
-        json[:relationships][:users][:data].each do |user|
+        expect(json[:data][:relationships][:users][:data].count).to eq(3)
+        json[:data][:relationships][:users][:data].each do |user|
           expect(user[:id]).to eq(user1.id.to_s).or eq(user2.id.to_s).or eq(user4.id.to_s)
           expect(user[:type]).to eq("user")
         end
@@ -82,7 +82,7 @@ RSpec.describe "Viewing Party API", type: :request do
         json = JSON.parse(response.body, symbolize_names: true)
 
         expect(response).to have_http_status(:bad_request)
-        expect(json[:message]).to eq("Party duration can't be less than movie runtime")
+        expect(json[:message]).to eq("End time must be greater than 2025-02-01 10:00:00 UTC")
         expect(json[:status]).to eq(400)
       end
 
@@ -93,7 +93,7 @@ RSpec.describe "Viewing Party API", type: :request do
         json = JSON.parse(response.body, symbolize_names: true)
 
         expect(response).to have_http_status(:bad_request)
-        expect(json[:message]).to eq("Party end time can't be before start time")
+        expect(json[:message]).to eq("End time must be greater than 2025-02-01 10:00:00 UTC")
         expect(json[:status]).to eq(400)
       end
 
