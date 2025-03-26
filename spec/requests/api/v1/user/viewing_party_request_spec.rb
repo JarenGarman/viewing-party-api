@@ -42,6 +42,14 @@ RSpec.describe "Viewing Party API", type: :request do
 
     context "with invalid request" do
       it "returns an error for missing field" do
+        party_params[:name] = ""
+
+        post api_v1_user_viewing_party_path(user3.id), params: party_params, as: :json
+        json = JSON.parse(response.body, symbolize_names: true)
+
+        expect(response).to have_http_status(:bad_request)
+        expect(json[:message]).to eq("Name can't be blank")
+        expect(json[:status]).to eq(400)
       end
     end
   end
