@@ -1,7 +1,8 @@
 class Api::V1::ViewingPartiesController < ApplicationController
-  rescue_from ActiveRecord::RecordNotFound do |e|
+  rescue_from ActiveRecord::RecordNotFound do
     render json: ErrorSerializer.format_error(ErrorMessage.new("Host user does not exist", 404)), status: :not_found
   end
+
   def create
     User.find(params[:user_id])
     viewing_party = ViewingParty.new(viewing_party_params)
