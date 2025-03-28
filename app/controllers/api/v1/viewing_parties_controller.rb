@@ -4,16 +4,9 @@ class Api::V1::ViewingPartiesController < ApplicationController
   end
 
   def create
-    conn = Faraday.new(url: "https://api.themoviedb.org") do |faraday|
-      faraday.request :authorization, "Bearer", Rails.application.credentials.tmdb[:token]
-    end
+    movie = MovieGateway.get_movie(params[:movie_id])
 
-    response = conn.get("/3/movie/#{params[:movie_id]}")
-
-    json = JSON.parse(response.body, symbolize_names: true)
-    runtime = json[:runtime]
-
-    if DateTime.parse(params[:start_time]) + runtime.minutes > DateTime.parse(params[:end_time])
+    if DateTime.parse(params[:start_time]) + movie.runtime.minutes > DateTime.parse(params[:end_time])
       render json: ErrorSerializer.format_error(ErrorMessage.new("Party must last long enough for the entire movie", 400)), status: :bad_request
       return
     end

@@ -10,7 +10,7 @@ RSpec.describe "Movies API", type: :request do
 
       expect(json[:data].count).to eq(20)
       json[:data].each do |movie|
-        expect(movie[:id]).to be_an(Integer)
+        expect(movie[:id]).to be_a(String)
         expect(movie[:type]).to eq("movie")
         expect(movie[:attributes][:title]).to be_a(String)
         expect(movie[:attributes][:vote_average]).to be_a(Float)
@@ -25,7 +25,7 @@ RSpec.describe "Movies API", type: :request do
 
       expect(json[:data].count).to be <= 20
       json[:data].each do |movie|
-        expect(movie[:id]).to be_an(Integer)
+        expect(movie[:id]).to be_a(String)
         expect(movie[:type]).to eq("movie")
         expect(movie[:attributes][:title]).to be_a(String)
         expect(movie[:attributes][:title].downcase).to include("lord of the rings").or include("hobbit").or include("return of the king")
