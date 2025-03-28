@@ -14,19 +14,6 @@ class Api::V1::MoviesController < ApplicationController
 
     json = JSON.parse(response.body, symbolize_names: true)
 
-    formatted_json = json[:results].each_with_object([]) do |movie, formatted_movies|
-      break if formatted_movies.length == 20
-
-      formatted_movies << {
-        id: movie[:id],
-        type: "movie",
-        attributes: {
-          title: movie[:title],
-          vote_average: movie[:vote_average]
-        }
-      }
-    end
-
-    render json: {data: formatted_json}
+    render json: MovieSerializer.new(json[:results].first(20))
   end
 end
