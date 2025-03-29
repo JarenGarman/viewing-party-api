@@ -24,9 +24,14 @@ class Api::V1::ViewingPartiesController < ApplicationController
   end
 
   def update
-    User.find(params[:user_id])
+    host = User.find(params[:user_id])
     viewing_party = ViewingParty.find(params[:id])
     invitee = User.find(params[:invitees_user_id])
+
+    if viewing_party.user.id != host.id
+      render json: ErrorSerializer.format_error(ErrorMessage.new("User is not host", 401)), status: :unauthorized
+      return
+    end
 
     viewing_party.users << invitee
     render json: ViewingPartySerializer.new(viewing_party), status: :ok
