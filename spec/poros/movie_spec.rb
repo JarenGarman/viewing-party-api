@@ -46,7 +46,14 @@ RSpec.describe Movie do
     end
 
     it "#genres" do
-      expect(movie.genres).to eq(["Drama", "Crime"])
+      expect(movie.genres).to eq({
+        id: 18,
+        name: "Drama"
+      },
+        {
+          id: 80,
+          name: "Crime"
+        })
     end
 
     it "#summary" do
@@ -148,7 +155,7 @@ RSpec.describe Movie do
       expect(movie.reviews.count).to eq(5)
       movie.reviews.each do |review|
         expect(review[:author]).to be_a String
-        expect(review[:review]).to be_a String
+        expect(review[:content]).to be_a String
       end
     end
 
@@ -301,7 +308,7 @@ RSpec.describe Movie do
       expect(movie.cast.length).to eq(10)
       movie.cast.each do |cast_member|
         expect(cast_member[:character]).to be_a String
-        expect(cast_member[:actor]).to be_a String
+        expect(cast_member[:name]).to be_a String
       end
     end
   end
