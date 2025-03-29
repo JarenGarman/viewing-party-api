@@ -109,9 +109,10 @@ RSpec.describe "Viewing Party API", type: :request do
   end
 
   describe "Invite Additional User Endpoint" do
-    let(:user5) { User.create!(name: "Lorax", username: "green_space", password: "blurble") }
+    let(:user5) { User.create!(name: "Borax", username: "brown_space", password: "flurble") }
     let(:party) {
-      user3.viewing_parties.create!(
+      ViewingParty.create!(
+        user: user3,
         name: "Juliet's Bday Movie Bash!",
         start_time: "2025-02-01 10:00:00",
         end_time: "2025-02-01 14:30:00",
@@ -121,14 +122,14 @@ RSpec.describe "Viewing Party API", type: :request do
     }
 
     before do
-      party.viewing_party_users.create!(user: user1)
-      party.viewing_party_users.create!(user: user2)
-      party.viewing_party_users.create!(user: user4)
+      party.users << user1
+      party.users << user2
+      party.users << user4
     end
 
     context "with valid request" do
       it "adds user and returns viewing party" do
-        patch api_v1_user_viewing_parties_path(user3.id, party.id), params: {invitees_user_id: user5.id}, as: :json
+        patch "/api/v1/users/#{user3.id}/viewing_parties/#{party.id}", params: {invitees_user_id: user5.id}, as: :json
 
         expect(response).to have_http_status(:ok)
         json = JSON.parse(response.body, symbolize_names: true)
@@ -151,7 +152,7 @@ RSpec.describe "Viewing Party API", type: :request do
 
     context "with invalid request" do
       it "returns an error for invalid host id" do
-        patch api_v1_user_viewing_parties_path(100000, party.id), params: {invitees_user_id: user5.id}, as: :json
+        patch "/api/v1/users/100000/viewing_parties/#{party.id}", params: {invitees_user_id: user5.id}, as: :json
 
         expect(response).to have_http_status(:not_found)
         json = JSON.parse(response.body, symbolize_names: true)
@@ -160,7 +161,7 @@ RSpec.describe "Viewing Party API", type: :request do
       end
 
       it "returns an error for invalid party id" do
-        patch api_v1_user_viewing_parties_path(user3.id, 100000), params: {invitees_user_id: user5.id}, as: :json
+        patch "/api/v1/users/#{user3.id}/viewing_parties/100000", params: {invitees_user_id: user5.id}, as: :json
 
         expect(response).to have_http_status(:not_found)
         json = JSON.parse(response.body, symbolize_names: true)
@@ -169,7 +170,7 @@ RSpec.describe "Viewing Party API", type: :request do
       end
 
       it "returns an error for invalid user id" do
-        patch api_v1_user_viewing_parties_path(user3.id, party.id), params: {invitees_user_id: 100000}, as: :json
+        patch "/api/v1/users/#{user3.id}/viewing_parties/#{party.id}", params: {invitees_user_id: 100000}, as: :json
 
         expect(response).to have_http_status(:not_found)
         json = JSON.parse(response.body, symbolize_names: true)
