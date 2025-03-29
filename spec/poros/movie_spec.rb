@@ -5,7 +5,7 @@ RSpec.describe Movie do
     described_class.new({
       id: 278,
       title: "The Shawshank Redemption",
-      release_year: 1994,
+      release_date: "1994-09-23",
       vote_average: 8.709,
       runtime: 142,
       genres: [
@@ -33,8 +33,8 @@ RSpec.describe Movie do
       expect(movie.title).to eq("The Shawshank Redemption")
     end
 
-    it "#release_year" do
-      expect(movie.release_year).to eq(1994)
+    it "#release_date" do
+      expect(movie.release_date).to eq("1994-09-23")
     end
 
     it "#vote_average" do
