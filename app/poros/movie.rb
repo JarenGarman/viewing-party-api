@@ -1,7 +1,7 @@
 class Movie
   attr_reader :id,
     :title,
-    :release_year,
+    :release_date,
     :vote_average,
     :runtime,
     :genres,
@@ -13,7 +13,7 @@ class Movie
   def initialize(data)
     @id = data[:id]
     @title = data[:title]
-    @release_year = data[:release_year]
+    @release_date = data[:release_date]
     @vote_average = data[:vote_average]
     @runtime = data[:runtime]
     @genres = data[:genres]

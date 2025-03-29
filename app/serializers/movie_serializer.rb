@@ -1,10 +1,13 @@
 class MovieSerializer
   include JSONAPI::Serializer
   attributes :title,
-    :release_year,
     :vote_average,
     :summary,
     :total_reviews
+
+  attribute :release_year do |movie|
+    movie.release_date.first(4).to_i
+  end
 
   attribute :runtime do |movie|
     h, m = movie.runtime.divmod(60)
