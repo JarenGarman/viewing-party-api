@@ -1,6 +1,6 @@
 class Api::V1::ViewingPartiesController < ApplicationController
-  rescue_from ActiveRecord::RecordNotFound do
-    render json: ErrorSerializer.format_error(ErrorMessage.new("Host user does not exist", 404)), status: :not_found
+  rescue_from ActiveRecord::RecordNotFound do |e|
+    render json: ErrorSerializer.format_error(ErrorMessage.new(e.message, 404)), status: :not_found
   end
 
   def create
@@ -21,6 +21,15 @@ class Api::V1::ViewingPartiesController < ApplicationController
     else
       render json: ErrorSerializer.format_error(ErrorMessage.new(viewing_party.errors.full_messages.to_sentence, 400)), status: :bad_request
     end
+  end
+
+  def update
+    User.find(params[:user_id])
+    viewing_party = ViewingParty.find(params[:id])
+    invitee = User.find(params[:invitees_user_id])
+
+    viewing_party.users << invitee
+    render json: ViewingPartySerializer.new(viewing_party), status: :ok
   end
 
   private
