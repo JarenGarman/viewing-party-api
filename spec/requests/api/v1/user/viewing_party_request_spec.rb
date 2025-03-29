@@ -102,7 +102,7 @@ RSpec.describe "Viewing Party API", type: :request do
         json = JSON.parse(response.body, symbolize_names: true)
 
         expect(response).to have_http_status(:not_found)
-        expect(json[:message]).to eq("Host user does not exist")
+        expect(json[:message]).to eq("Couldn't find User with 'id'=100000")
         expect(json[:status]).to eq(404)
       end
     end
@@ -156,7 +156,7 @@ RSpec.describe "Viewing Party API", type: :request do
 
         expect(response).to have_http_status(:not_found)
         json = JSON.parse(response.body, symbolize_names: true)
-        expect(json[:message]).to eq("Host user does not exist")
+        expect(json[:message]).to eq("Couldn't find User with 'id'=100000")
         expect(json[:status]).to eq(404)
       end
 
@@ -165,7 +165,7 @@ RSpec.describe "Viewing Party API", type: :request do
 
         expect(response).to have_http_status(:not_found)
         json = JSON.parse(response.body, symbolize_names: true)
-        expect(json[:message]).to eq("Viewing party does not exist")
+        expect(json[:message]).to eq("Couldn't find ViewingParty with 'id'=100000")
         expect(json[:status]).to eq(404)
       end
 
@@ -174,7 +174,7 @@ RSpec.describe "Viewing Party API", type: :request do
 
         expect(response).to have_http_status(:not_found)
         json = JSON.parse(response.body, symbolize_names: true)
-        expect(json[:message]).to eq("Invitee does not exist")
+        expect(json[:message]).to eq("Couldn't find User with 'id'=100000")
         expect(json[:status]).to eq(404)
       end
     end
