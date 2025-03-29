@@ -107,4 +107,75 @@ RSpec.describe "Viewing Party API", type: :request do
       end
     end
   end
+
+  describe "Invite Additional User Endpoint" do
+    let(:user5) { User.create!(name: "Lorax", username: "green_space", password: "blurble") }
+    let(:party) {
+      user3.viewing_parties.create!(
+        name: "Juliet's Bday Movie Bash!",
+        start_time: "2025-02-01 10:00:00",
+        end_time: "2025-02-01 14:30:00",
+        movie_id: 278,
+        movie_title: "The Shawshank Redemption"
+      )
+    }
+
+    before do
+      party.viewing_party_users.create!(user: user1)
+      party.viewing_party_users.create!(user: user2)
+      party.viewing_party_users.create!(user: user4)
+    end
+
+    context "with valid request" do
+      it "adds user and returns viewing party" do
+        patch api_v1_user_viewing_parties_path(user3.id, party.id), params: {invitees_user_id: user5.id}, as: :json
+
+        expect(response).to have_http_status(:ok)
+        json = JSON.parse(response.body, symbolize_names: true)
+        expect(json[:data][:type]).to eq("viewing_party")
+        expect(json[:data][:id]).to eq(ViewingParty.last.id.to_s)
+        expect(json[:data][:attributes]).to include(
+          name: "Juliet's Bday Movie Bash!",
+          start_time: "2025-02-01T10:00:00.000Z",
+          end_time: "2025-02-01T14:30:00.000Z",
+          movie_id: 278,
+          movie_title: "The Shawshank Redemption"
+        )
+        expect(json[:data][:relationships][:users][:data].count).to eq(4)
+        json[:data][:relationships][:users][:data].each do |user|
+          expect(user[:id]).to eq(user1.id.to_s).or eq(user2.id.to_s).or eq(user4.id.to_s).or eq(user5.id.to_s)
+          expect(user[:type]).to eq("user")
+        end
+      end
+    end
+
+    context "with invalid request" do
+      it "returns an error for invalid host id" do
+        patch api_v1_user_viewing_parties_path(100000, party.id), params: {invitees_user_id: user5.id}, as: :json
+
+        expect(response).to have_http_status(:not_found)
+        json = JSON.parse(response.body, symbolize_names: true)
+        expect(json[:message]).to eq("Host user does not exist")
+        expect(json[:status]).to eq(404)
+      end
+
+      it "returns an error for invalid party id" do
+        patch api_v1_user_viewing_parties_path(user3.id, 100000), params: {invitees_user_id: user5.id}, as: :json
+
+        expect(response).to have_http_status(:not_found)
+        json = JSON.parse(response.body, symbolize_names: true)
+        expect(json[:message]).to eq("Viewing party does not exist")
+        expect(json[:status]).to eq(404)
+      end
+
+      it "returns an error for invalid user id" do
+        patch api_v1_user_viewing_parties_path(user3.id, party.id), params: {invitees_user_id: 100000}, as: :json
+
+        expect(response).to have_http_status(:not_found)
+        json = JSON.parse(response.body, symbolize_names: true)
+        expect(json[:message]).to eq("Invitee does not exist")
+        expect(json[:status]).to eq(404)
+      end
+    end
+  end
 end
