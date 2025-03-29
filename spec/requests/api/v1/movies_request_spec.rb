@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Movies API", type: :request do
-  describe "happy path" do
+  describe "Top Rated Movies Endpoint" do
     it "can retrieve top rated movies", :vcr do
       get api_v1_movies_path
 
@@ -16,7 +16,9 @@ RSpec.describe "Movies API", type: :request do
         expect(movie[:attributes][:vote_average]).to be_a(Float)
       end
     end
+  end
 
+  describe "Search Movies Endpoint" do
     it "can search movie titles", :vcr do
       get api_v1_movies_path, params: {search: "Lord of the Rings"}
 
