@@ -177,6 +177,15 @@ RSpec.describe "Viewing Party API", type: :request do
         expect(json[:message]).to eq("Couldn't find User with 'id'=100000")
         expect(json[:status]).to eq(404)
       end
+
+      it "returns an error when user is not host" do
+        patch "/api/v1/users/#{user2.id}/viewing_parties/#{party.id}", params: {invitees_user_id: user5.id}, as: :json
+
+        expect(response).to have_http_status(:unauthorized)
+        json = JSON.parse(response.body, symbolize_names: true)
+        expect(json[:message]).to eq("User is not host")
+        expect(json[:status]).to eq(401)
+      end
     end
   end
 end
