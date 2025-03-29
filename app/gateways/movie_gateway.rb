@@ -26,11 +26,32 @@ class MovieGateway
     end
   end
 
+  def self.movie_details(id)
+    movie = get_movie(id)
+    get_reviews(id, movie)
+    get_cast(id, movie)
+    movie
+  end
+
   private_class_method
 
   def self.connection
     Faraday.new(url: "https://api.themoviedb.org") do |faraday|
       faraday.request :authorization, "Bearer", Rails.application.credentials.tmdb[:token]
     end
+  end
+
+  def self.get_reviews(id, movie)
+    response = connection.get("/3/movie/#{id}/reviews")
+
+    json = JSON.parse(response.body, symbolize_names: true)
+    movie.add_reviews(json)
+  end
+
+  def self.get_cast(id, movie)
+    response = connection.get("/3/movie/#{id}/credits")
+
+    json = JSON.parse(response.body, symbolize_names: true)
+    movie.add_cast(json)
   end
 end

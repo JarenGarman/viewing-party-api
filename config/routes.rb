@@ -14,7 +14,7 @@ Rails.application.routes.draw do
         patch "/viewing_parties/:id", to: "viewing_parties#update"
       end
       resources :sessions, only: :create
-      resources :movies, only: :index
+      resources :movies, only: [:index, :show]
     end
   end
 end
