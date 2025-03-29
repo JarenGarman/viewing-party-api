@@ -46,14 +46,14 @@ RSpec.describe Movie do
     end
 
     it "#genres" do
-      expect(movie.genres).to eq({
+      expect(movie.genres).to eq([{
         id: 18,
         name: "Drama"
       },
         {
           id: 80,
           name: "Crime"
-        })
+        }])
     end
 
     it "#summary" do
@@ -61,15 +61,15 @@ RSpec.describe Movie do
     end
 
     it "#cast" do
-      expect(movie.cast).to eq([])
+      expect(movie.cast).to be_nil
     end
 
     it "#total_reviews" do
-      expect(movie.total_reviews).to eq(0)
+      expect(movie.total_reviews).to be_nil
     end
 
     it "#reviews" do
-      expect(movie.reviews).to eq([])
+      expect(movie.reviews).to be_nil
     end
   end
 
@@ -82,7 +82,7 @@ RSpec.describe Movie do
             author_details: {
               name: "",
               username: "elshaarawy",
-              avatar_path: null,
+              avatar_path: nil,
               rating: 9
             },
             content: "very good movie 9.5/10 محمد الشعراوى",
@@ -110,7 +110,7 @@ RSpec.describe Movie do
             author_details: {
               name: "",
               username: "tmdb73913433",
-              avatar_path: null,
+              avatar_path: nil,
               rating: 6
             },
             content: "Make way for the best film ever made people. **Make way.**",
@@ -124,7 +124,7 @@ RSpec.describe Movie do
             author_details: {
               name: "",
               username: "thommo_nz",
-              avatar_path: null,
+              avatar_path: nil,
               rating: 10
             },
             content: "There is a reason why this movie is at the top of any popular list your will find.\r\nVery strong performances from lead actors and a story line from the literary brilliance of Stephen King (and no, its not a horror).\r\nSufficient drama and depth to keep you interested and occupied without stupefying your brain. It is the movie that has something for everyone.",
@@ -139,7 +139,7 @@ RSpec.describe Movie do
               name: "Andrew Gentry",
               username: "AndrewGentry",
               avatar_path: "/vVGgWZe3bDdy0fsODYDtrL8J51b.jpg",
-              rating: null
+              rating: nil
             },
             content: "It's still puzzling to me why this movie exactly continues to appear in every single best-movies-of-all-time chart. There's a great story, perfect cast, and acting. It really moves me in times when I'm finding myself figuring out things with my annual tax routine reading <a href=\"https://www.buzzfeed.com/davidsmithjd/what-is-form-w-2-and-how-does-it-work-3n31d\">this article</a>, and accidentally catching myself wondering what my life should be if circumstances had changed so drastically. This movie worth a rewatch by all means, but yet, there's no unique vibe or something - there are thousands of other ones as good as this one.",
             created_at: "2018-10-18T15:08:48.777Z",
