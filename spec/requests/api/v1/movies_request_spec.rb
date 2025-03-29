@@ -35,4 +35,36 @@ RSpec.describe "Movies API", type: :request do
       end
     end
   end
+
+  describe "Show Movie Endpoint" do
+    it "returns movie with expected attributes", :vcr do
+      get api_v1_movie_path(278)
+
+      expect(response).to be_successful
+      movie = JSON.parse(response.body, symbolize_names: true)[:data]
+      attributes = movie[:attributes]
+
+      expect(movie[:id]).to eq("278")
+      expect(movie[:type]).to eq("movie")
+      expect(attributes[:title]).to be_a String
+      expect(attributes[:release_year]).to be_an Integer
+      expect(attributes[:vote_average]).to be_a Float
+      expect(attributes[:runtime]).to be_a String
+      expect(attributes[:genres].all?(String)).to be true
+      expect(attributes[:summary]).to be_a String
+      expect(attributes[:cast].length).to be <= 10
+      expect(attributes[:total_reviews]).to be_an Integer
+      expect(attributes[:reviews].length).to be <= 5
+
+      attributes[:cast].each do |cast_member|
+        expect(cast_member[:character]).to be_a String
+        expect(cast_member[:actor]).to be_a String
+      end
+
+      attributes[:reviews].each do |review|
+        expect(review[:author]).to be_a String
+        expect(review[:review]).to be_a String
+      end
+    end
+  end
 end
