@@ -6,6 +6,6 @@ class Api::V1::MoviesController < ApplicationController
       MovieGateway.top_rated_movies
     end
 
-    render json: MovieSerializer.new(movies)
+    render json: MovieSerializer.new(movies, {fields: {movie: [:title, :vote_average]}})
   end
 end
