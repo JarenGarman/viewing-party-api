@@ -6,7 +6,7 @@ class MovieSerializer
     :total_reviews
 
   attribute :release_year do |movie|
-    movie.release_date.first(4).to_i
+    Date.parse(movie.release_date).year
   end
 
   attribute :runtime do |movie|
