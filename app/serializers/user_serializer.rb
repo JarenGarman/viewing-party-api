@@ -2,18 +2,11 @@ class UserSerializer
   include JSONAPI::Serializer
   attributes :name, :username, :api_key
 
-  def self.format_user_list(users)
-    { data:
-        users.map do |user|
-          {
-            id: user.id.to_s,
-            type: "user",
-            attributes: {
-              name: user.name,
-              username: user.username
-            }
-          }
-        end
-    }
+  attribute :viewing_parties_hosted do |user|
+    ViewingPartySerializer.hosted(ViewingParty.where(user_id: user.id))
+  end
+
+  attribute :viewing_parties_invited do |user|
+    ViewingPartySerializer.invited(user.viewing_parties)
   end
 end
