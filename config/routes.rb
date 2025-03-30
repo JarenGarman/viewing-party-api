@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   # root "posts#index"
   namespace :api do
     namespace :v1 do
-      resources :users, only: [:create, :index] do
+      resources :users, only: [:create, :index, :show] do
         resources :viewing_parties, only: :create
         patch "/viewing_parties/:id", to: "viewing_parties#update"
       end
