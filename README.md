@@ -111,6 +111,28 @@ Example: `GET http://127.0.0.1:3000/api/v1/users/4`
 Response:
 
 ```json
+{
+    "data": {
+        "id": "4",
+        "type": "user",
+        "attributes": {
+            "name": "Me",
+            "username": "its_me",
+            "viewing_parties_hosted": [
+                {
+                    "id": 1,
+                    "name": "Juliet's Bday Movie Bash!",
+                    "start_time": "2025-02-01T10:00:00.000Z",
+                    "end_time": "2025-02-01T14:30:00.000Z",
+                    "movie_id": 278,
+                    "movie_title": "The Shawshank Redemption",
+                    "host_id": 4
+                }
+            ],
+            "viewing_parties_invited": []
+        }
+    }
+}
 ```
 
 ### Sessions
@@ -275,6 +297,122 @@ Response:
                 },
                 ...
             ]
+        }
+    }
+}
+```
+
+### Viewing Parties
+
+#### Create Viewing Party
+
+To create a viewing party, send a `POST` request to `<base_path>/users/<User ID>/viewing_parties` with a JSON formatted body that contains the following *required* params:
+
+1. name
+2. start_time
+3. end_time (must allow for the full runtime of the movie)
+4. movie_id
+5. movie_title
+6. invitees
+
+Example: `POST http://127.0.0.1:3000/api/v1/users/4/viewing_parties`
+
+```json
+{
+    "name": "Juliet's Bday Movie Bash!",
+    "start_time": "2025-02-01 10:00:00",
+    "end_time": "2025-02-01 14:30:00",
+    "movie_id": 278,
+    "movie_title": "The Shawshank Redemption",
+    "invitees": [1, 2, 3]
+}
+```
+
+Response:
+
+```json
+{
+    "data": {
+        "id": "1",
+        "type": "viewing_party",
+        "attributes": {
+            "name": "Juliet's Bday Movie Bash!",
+            "start_time": "2025-02-01T10:00:00.000Z",
+            "end_time": "2025-02-01T14:30:00.000Z",
+            "movie_id": 278,
+            "movie_title": "The Shawshank Redemption"
+        },
+        "relationships": {
+            "users": {
+                "data": [
+                    {
+                        "id": "1",
+                        "type": "user"
+                    },
+                    {
+                        "id": "2",
+                        "type": "user"
+                    },
+                    {
+                        "id": "3",
+                        "type": "user"
+                    }
+                ]
+            }
+        }
+    }
+}
+```
+
+#### Invite User to Existing Viewing Party
+
+To invite a user to an existing viewing party, send a `PATCH` request to `<base_path>/users/<User ID>/viewing_parties/<Viewing Party ID` with a JSON formatted body that contains the following *required* param:
+
+1. invitees_user_id
+
+Example: `PATCH http://127.0.0.1:3000/api/v1/users/4/viewing_parties/1`
+
+```json
+{
+      "invitees_user_id": 5
+}
+```
+
+Response:
+
+```json
+{
+    "data": {
+        "id": "1",
+        "type": "viewing_party",
+        "attributes": {
+            "name": "Juliet's Bday Movie Bash!",
+            "start_time": "2025-02-01T10:00:00.000Z",
+            "end_time": "2025-02-01T14:30:00.000Z",
+            "movie_id": 278,
+            "movie_title": "The Shawshank Redemption"
+        },
+        "relationships": {
+            "users": {
+                "data": [
+                    {
+                        "id": "1",
+                        "type": "user"
+                    },
+                    {
+                        "id": "2",
+                        "type": "user"
+                    },
+                    {
+                        "id": "3",
+                        "type": "user"
+                    },
+                    {
+                        "id": "5",
+                        "type": "user"
+                    }
+                ]
+            }
         }
     }
 }
