@@ -228,3 +228,54 @@ Response:
     ]
 }
 ```
+
+#### Show Movie
+
+To get the details of a particular movie, send a `GET` request to `<base_path>/movies/<Movie ID>`
+
+Example: `GET http://127.0.0.1:3000/api/v1/movies/278`
+
+Response:
+
+```json
+{
+    "data": {
+        "id": "278",
+        "type": "movie",
+        "attributes": {
+            "title": "The Shawshank Redemption",
+            "vote_average": 8.709,
+            "summary": "Imprisoned in the 1940s for the double murder of his wife and her lover, upstanding banker Andy Dufresne begins a new life at the Shawshank prison, where he puts his accounting skills to work for an amoral warden. During his long stretch in prison, Dufresne comes to be admired by the other inmates -- including an older prisoner named Red -- for his integrity and unquenchable sense of hope.",
+            "total_reviews": 17,
+            "release_year": 1994,
+            "runtime": "2 hours, 22 minutes",
+            "genres": [
+                "Drama",
+                "Crime"
+            ],
+            "cast": [
+                {
+                    "character": "Ellis Boyd 'Red' Redding",
+                    "actor": "Morgan Freeman"
+                },
+                {
+                    "character": "Andy Dufresne",
+                    "actor": "Tim Robbins"
+                },
+                {
+                    "character": "Warden Norton",
+                    "actor": "Bob Gunton"
+                },
+                ...
+            ],
+            "reviews": [
+                {
+                    "author": "elshaarawy",
+                    "review": "very good movie 9.5/10 محمد الشعراوى"
+                },
+                ...
+            ]
+        }
+    }
+}
+```
