@@ -28,7 +28,7 @@ To create a user, send a `POST` request to `<base_path>/users` with a JSON forma
 3. password
 4. password_confirmation (must match password)
 
-Example:
+Example: `POST http://127.0.0.1:3000/api/v1/users`
 
 ```json
 {
@@ -58,6 +58,8 @@ Response:
 #### Get All Users
 
 To get a list of all users, send a `GET` request to `<base_path>/users`
+
+Example: `GET http://127.0.0.1:3000/api/v1/users`
 
 Response:
 
@@ -104,6 +106,8 @@ Response:
 
 To get the details of a particular user (including viewing parties), send a `GET` request to `<base_path>/users/<User ID>`
 
+Example: `GET http://127.0.0.1:3000/api/v1/users/4`
+
 Response:
 
 ```json
@@ -118,7 +122,7 @@ To login, send a `POST` request to `<base_path>/sessions` with a JSON formatted 
 1. username
 2. password
 
-Example:
+Example: `POST http://127.0.0.1:3000/api/v1/sessions`
 
 ```json
 {
@@ -140,5 +144,87 @@ Response:
             "api_key": "<API_Key>"
         }
     }
+}
+```
+
+### Movies
+
+#### Top Rated Movies
+
+To get a list of top rated movies (maximum of 20), send a `GET` request to `<base_path>/movies`
+
+Example: `GET http://127.0.0.1:3000/api/v1/movies`
+
+Response:
+
+```json
+{
+    "data": [
+        {
+            "id": "278",
+            "type": "movie",
+            "attributes": {
+                "title": "The Shawshank Redemption",
+                "vote_average": 8.709
+            }
+        },
+        {
+            "id": "238",
+            "type": "movie",
+            "attributes": {
+                "title": "The Godfather",
+                "vote_average": 8.689
+            }
+        },
+        {
+            "id": "240",
+            "type": "movie",
+            "attributes": {
+                "title": "The Godfather Part II",
+                "vote_average": 8.569
+            }
+        },
+        ...
+    ]
+}
+```
+
+#### Search Movies
+
+To search for a list of movies by title (maximum of 20), send a `GET` request to `<base_path>/movies` with a query param `search` equal to a URL encoded string of your search term.
+
+Example: `GET http://127.0.0.1:3000/api/v1/movies?search=Lord%20of%20the%20Rings`
+
+Response:
+
+```json
+{
+    "data": [
+        {
+            "id": "122",
+            "type": "movie",
+            "attributes": {
+                "title": "The Lord of the Rings: The Return of the King",
+                "vote_average": 8.482
+            }
+        },
+        {
+            "id": "123",
+            "type": "movie",
+            "attributes": {
+                "title": "The Lord of the Rings",
+                "vote_average": 6.6
+            }
+        },
+        {
+            "id": "839033",
+            "type": "movie",
+            "attributes": {
+                "title": "The Lord of the Rings: The War of the Rohirrim",
+                "vote_average": 6.631
+            }
+        },
+        ...
+    ]
 }
 ```
